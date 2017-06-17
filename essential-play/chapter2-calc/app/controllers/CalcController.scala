@@ -26,14 +26,17 @@ object CalcController extends Controller {
   //  - return a plain text HTTP 200 response containing the result.
   //
   // TIP: Use the `urlDecode` helper method if you need to to decode the .
-  def concat(args: String) = ???
-
+  def concat(args: String) = Action { request =>
+    Ok(args.split("/").mkString)
+  }
   // TODO: Create an action called `concat`:
   //
   //  - accept a list of integers extracted from the URL;
   //  - sort the list;
   //  - return a space separated plain text HTTP 200 response of the result.
-  def sort(a: List[Int]) = ???
+  def sort(a: List[Int]) = Action { request =>
+    Ok(a.sorted mkString " ")
+  }
 
   // TODO: Create an action called `howToAdd`:
   //
