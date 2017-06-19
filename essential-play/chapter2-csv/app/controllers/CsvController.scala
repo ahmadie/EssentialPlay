@@ -33,6 +33,19 @@ object CsvController extends Controller with CsvHelpers {
   //  - Look at the helper functions in `CsvHelpers`.
   //    They will do a lot of the heavy lifting for you.
   def toCsv = ???
+
+  def formDataResult(request: Request[AnyContent]): Option[Result] =
+    request.body.asFormUrlEncoded map formDataToCsv map csvResult
+
+  def plainTextResult(request: Request[AnyContent]): Option[Result] =
+    request.body.asText map tsvToCsv map csvResult
+
+  def rawBufferResult(request: Request[AnyContent]): Option[Result] =
+    request.contentType flatMap {
+      case "text/tsv" => request.body.asRaw map rawBufferToCsv map csvResult
+      case _          => None
+    }
+
 }
 
 trait CsvHelpers {
