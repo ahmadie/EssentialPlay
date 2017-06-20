@@ -32,7 +32,12 @@ object CsvController extends Controller with CsvHelpers {
   //
   //  - Look at the helper functions in `CsvHelpers`.
   //    They will do a lot of the heavy lifting for you.
-  def toCsv = ???
+  def toCsv = Action { request =>
+    formDataResult(request) orElse
+    plainTextResult(request) orElse
+    rawBufferResult(request) getOrElse
+    failResult
+  }
 
   def formDataResult(request: Request[AnyContent]): Option[Result] =
     request.body.asFormUrlEncoded map formDataToCsv map csvResult
@@ -45,6 +50,13 @@ object CsvController extends Controller with CsvHelpers {
       case "text/tsv" => request.body.asRaw map rawBufferToCsv map csvResult
       case _          => None
     }
+
+  def csvResult(csvData: String): Result =
+    Ok(csvData).withHeaders("Content-Type" -> "text/csv")
+
+  val failResult: Result =
+    BadRequest("Expected application/x-www-form-url-encoded, " +
+      "text/tsv, or text/plain")
 
 }
 
