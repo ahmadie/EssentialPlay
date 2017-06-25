@@ -15,6 +15,15 @@ object AuthController extends Controller {
   // NOTE: We don't know how to create HTML yet,
   // so populate each response with a plain text message.
   def login(username: Username, password: Password) = Action { request =>
-    ???
+    AuthService.login(LoginRequest(username,password)) match {
+      case res: LoginSuccess =>
+        Ok("Logged In").withCookies(Cookie("credential", res.sessionId))
+
+      case res: UserNotFound =>
+        BadRequest("User not found or password incorrect")
+
+      case res: PasswordIncorrect =>
+        BadRequest("User not found or password incorrect")
+    }
   }
 }

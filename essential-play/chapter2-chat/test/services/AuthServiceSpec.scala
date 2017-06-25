@@ -15,8 +15,8 @@ class AuthServiceSpec extends PlaySpec with OneAppPerTest {
     }
 
     "not recognise unknown usernames" in {
-      AuthService.login(LoginRequest("anna", "password1")) must
-        equal(UserNotFound("anna"))
+      AuthService.login(LoginRequest("aliceXXX", "password1")) must
+        equal(UserNotFound("aliceXXX"))
     }
 
     "not recognise invalid passwords" in {

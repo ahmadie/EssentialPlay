@@ -18,7 +18,17 @@ object ChatController extends Controller {
   // NOTE: We don't know how to create HTML yet,
   // so populate each response with a plain text message.
   def index = Action { request =>
-    ???
+    request.cookies.get("credential") match {
+      case Some(cookie) =>
+        println(AuthService.whoami(cookie.value) )
+        AuthService.whoami(cookie.value) match {
+          case res: Credentials =>
+            Ok(res.username)
+          case res: SessionNotFound =>
+            BadRequest("not good")
+        }
+      case None => BadRequest("not good")
+    }
   }
 
   // TODO: Complete:

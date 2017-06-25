@@ -13,7 +13,7 @@ class AuthControllerSpec extends PlaySpec with ControllerSpecHelpers {
       )).get)
 
       response.status must equal(200)
-      response.body must include("""Logged in""")
+      response.body must include("Logged In")
     }
 
     "reject a missing user" in {

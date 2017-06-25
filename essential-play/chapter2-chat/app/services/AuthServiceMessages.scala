@@ -1,9 +1,10 @@
 package services
 
 object AuthServiceMessages {
-  type Username  = String
-  type Password  = String
+  type Username = String
+  type Password = String
   type SessionId = String
+
 
   // Signup endpoint ----------------------------
 
