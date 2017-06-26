@@ -5,7 +5,7 @@ object AuthService {
   import services.ChatServiceMessages._
 
   private val passwords = Map[Username, Password](
-    "alice"   -> "password1",
+    "aaa"   -> "aaa",
     "bob"     -> "password2",
     "charlie" -> "password3"
   )

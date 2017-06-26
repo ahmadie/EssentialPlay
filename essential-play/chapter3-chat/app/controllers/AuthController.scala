@@ -2,6 +2,7 @@ package controllers
 
 import play.api._
 import play.api.data._
+import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
 
@@ -11,14 +12,17 @@ object AuthController extends Controller with ControllerHelpers {
 
   // TODO: Complete:
   //  - Create a form for a LoginRequest
-  val loginForm: Form[LoginRequest] = ???
+  val loginForm = Form(mapping(
+    "username" -> nonEmptyText,
+    "password" -> nonEmptyText
+  )(LoginRequest.apply)(LoginRequest.unapply))
 
   // TODO: Complete:
   //  - Create a login page template:
   //     - Accepts a login form as a parameter
   //     - Displays the form and a submit button
   def login = Action { implicit request =>
-    ???
+    Ok(views.html.login(loginForm))
   }
 
   // TODO: Complete:
@@ -34,8 +38,32 @@ object AuthController extends Controller with ControllerHelpers {
   //
   //     loginForm.withError("username", "User not found") // returns a new login form
   def submitLogin = Action { implicit request =>
-    ???
+
+    val form = loginForm.bindFromRequest()
+
+    form.fold(
+      hasErrors = { form: Form[LoginRequest] =>
+        BadRequest(views.html.login(form))
+      },
+      success = { loginReq: LoginRequest =>
+        AuthService.login(loginReq) match {
+          case res: LoginSuccess =>
+            Redirect(routes.ChatController.index)
+              .withSessionCookie(res.sessionId)
+
+          case res: UserNotFound =>
+            BadRequest(views.html.login(addLoginError(form)))
+
+          case res: PasswordIncorrect =>
+            BadRequest(views.html.login(addLoginError(form)))
+        }
+      }
+    )
   }
+
+  def addLoginError(form: Form[LoginRequest]) =
+    form.withError("username", "User not found or password incorrect")
+
 
   def loginRedirect(res: LoginSuccess): Result =
     Redirect(routes.ChatController.index).withSessionCookie(res.sessionId)

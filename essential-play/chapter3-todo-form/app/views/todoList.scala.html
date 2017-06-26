@@ -1,4 +1,4 @@
-@(todoList: TodoList)
+@(todoList: TodoList, form: Form[Todo])
 
 @import models._
 
@@ -19,5 +19,5 @@
   <h2>Add a new todo</h2>
 
    <!-- TODO: Add "create todo" form to template -->
-   <p>TODO: Add "create todo" form to template</p>
+    @todoForm(form)
 }

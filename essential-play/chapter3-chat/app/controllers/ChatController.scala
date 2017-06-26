@@ -16,7 +16,9 @@ object ChatController extends Controller with ControllerHelpers {
 
   // TODO: Complete:
   //  - Create a form for a ChatRequest (defined above)
-  val chatForm: Form[ChatRequest] = ???
+  val chatForm = Form(mapping(
+    "text" -> nonEmptyText
+  )(ChatRequest.apply)(ChatRequest.unapply))
 
   // TODO: Complete:
   //  - Create a chat room template that accepts the following parameters:
@@ -27,7 +29,9 @@ object ChatController extends Controller with ControllerHelpers {
   //        - If they are, display a web page containing the current messages
   //        - If they aren't, redirect to the login page
   def index = Action { implicit request =>
-    ???
+      withAuthenticatedUser(request) { creds =>
+        Ok(views.html.chatroom(ChatService.messages, chatForm))
+    }
   }
 
   // TODO: Complete:
@@ -38,7 +42,17 @@ object ChatController extends Controller with ControllerHelpers {
   //           - If it's invalid, display an appropriate error message
   //     - If they aren't, redirect to the login page
   def submitMessage = Action { implicit request =>
-    ???
+    withAuthenticatedUser(request) { creds =>
+      chatForm.bindFromRequest().fold(
+        hasErrors = { form: Form[ChatRequest] =>
+          Ok(views.html.chatroom(ChatService.messages, form))
+        },
+        success = { chatReq: ChatRequest =>
+          ChatService.chat(creds.username, chatReq.text)
+          Ok(views.html.chatroom(ChatService.messages, chatForm))
+        }
+      )
+    }
   }
 
   private def withAuthenticatedUser(request: Request[AnyContent])(func: Credentials => Result): Result =
