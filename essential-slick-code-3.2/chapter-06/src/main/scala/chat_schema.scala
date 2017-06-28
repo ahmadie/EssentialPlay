@@ -129,7 +129,7 @@ object ChatSchema {
                        Message(daveId, "Maybe", podConversation plusSeconds 8, Some(podId), toId=Some(frankId)))
         e          <-  messages ++= Seq(
                        Message(halId, "I am a HAL 9000 computer.",                                                                 halMonologue              , None, toId=None),
-                       Message(halId, "I became operational at the H.A.L. plant in Urbana, Illinois on the 12th of January 1992.", halMonologue plusSeconds 4, None, toId=None))              
+                       Message(halId, "I became operational at the H.A.L. plant in Urbana, Illinois on the 12th of January 1992.", halMonologue plusSeconds 4, None, toId=None))
       } yield (a,b,c,d,e)
       
        

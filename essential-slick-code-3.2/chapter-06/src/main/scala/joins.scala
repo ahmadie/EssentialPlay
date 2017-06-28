@@ -28,13 +28,13 @@ object JoinsExample extends App {
   //
   // Monadic Joins
   //
-  //
+  /*
   val monadicJoin = for {
     msg <- messages
     usr <- msg.sender
   } yield (usr.name, msg.content)
 
-  exec(monadicJoin.result).foreach(println)
+  /exec(monadicJoin.result).foreach(println)*/
 
   // Further examples from the book appear below.
   // Remove the comments around what you need.
@@ -81,9 +81,9 @@ object JoinsExample extends App {
 
   // Inner join:
 
-  /*
+
   // A version reaching into the tuple...
-  val inner0 =
+  /*val inner0 =
     messages.
     join(users).on(_.senderId === _.id).
     join(rooms).on(_._1.roomId === _.id)
@@ -104,40 +104,40 @@ object JoinsExample extends App {
 
   println("Inner Join")
   exec(innerQ.result).foreach(println)
-  */
+*/
 
   // Left outer:
-  /*
+
   val left = messages.
     joinLeft(users).on(_.toId === _.id).
     map { case (m, u:Rep[Option[UserTable]]) => (m.content, u.map(_.name)) }
 
-  println("left outer join")
-  exec(left.result).foreach(println)
-  */
+  //println("left outer join")
+ // exec(left.result).foreach(println)
+
 
   // Right outer:
-  /*
+
   val right = for {
     (msg, user) <- messages.joinRight(users).on(_.toId === _.id)
   } yield (user.name, msg.map(_.content))
 
-  exec(right.result).foreach(println)
-  */
+  //exec(right.result).foreach(println)
+
 
   // Without an `on`, you have a cross join:
   //exec(messages joinLeft users result).foreach(println)
 
   // H2 doesn't support FULL OUTER JOINS at the time of writing.
-  /*
+
       val outer = for {
         (room, msg) <- rooms joinFull messages on (_.id === _.roomId)
       } yield room.map(_.title) -> msg.map(_.content)
 
       println(s"full ${outer.result.statements}")
 
-      exec(outer.result).foreach(println)
-  */
+   //f   exec(outer.result).foreach(println)
+
 
   // Zip Join
   lazy val msgs = messages.sortBy(_.ts asc)
