@@ -1,0 +1,7 @@
+PUT /import/word/:sourceLang/:targetLang/:word/:translation controllers.AppController.importWord(sourceLang: play.api.i18n.Lang, targetLang: play.api.i18n.Lang, word, translation)
+GET /import/word/:sourceLang/:targetLang/:word/:translation controllers.AppController.importWord(sourceLang: play.api.i18n.Lang, targetLang: play.api.i18n.Lang, word, translation)
+PUT /import/word/ controllers.AppController.index
+PUT /import/word controllers.AppController.index
+GET / controllers.AppController.index
+
+

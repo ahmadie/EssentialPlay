@@ -18,7 +18,7 @@ object TodoController extends Controller with TodoDataHelpers {
   )(Todo.apply)(Todo.unapply))
 
   def index = Action { request =>
-    Ok(renderTodoList(todoList, todoForm))
+    Ok(views.html.todoList(todoList, todoForm))
   }
   var todoList = TodoList(Seq(
     Todo("Dishes", true),
@@ -36,7 +36,7 @@ object TodoController extends Controller with TodoDataHelpers {
     //     - display errors.
     todoForm.bindFromRequest().fold(
        { errorForm =>
-        BadRequest(renderTodoList(todoList, errorForm))
+        BadRequest(views.html.todoList(todoList, errorForm))
       },
        { todo =>
         todoList = todoList.addOrUpdate(todo)
@@ -45,10 +45,6 @@ object TodoController extends Controller with TodoDataHelpers {
       }
     )
   }
-
-  def renderTodoList(todoList: TodoList,form: Form[Todo]): Html =
-    // TODO: Modify template to show form:
-    views.html.todoList(todoList, form)
 }
 
 trait TodoDataHelpers {
